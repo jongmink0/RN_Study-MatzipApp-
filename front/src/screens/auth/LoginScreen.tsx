@@ -1,43 +1,49 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import InputField from '../../components/inputField';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import CustomBotton from '../../components/CustomBotton';
-import useForm from '../../hooks/useForm';
-import {validateLogin} from '../../utils';
+import React, {useRef} from 'react';
+import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
+import useForm from '@/hooks/useForm';
+import useAuth from '@/hooks/queries/useAuth';
+import {validateLogin} from '@/utils';
+import InputField from '@/components/inputField';
+import CustomButton from '@/components/CustomButton';
 
 function LoginScreen() {
+  const {loginMutation} = useAuth();
+  const passwordRef = useRef<TextInput | null>(null);
   const login = useForm({
-    initialValue: {
-      email: '',
-      password: '',
-    },
+    initialValue: {email: '', password: ''},
     validate: validateLogin,
   });
 
   const handleSubmit = () => {
-    console.log('value', login.values);
+    loginMutation.mutate(login.values);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <InputField
+          autoFocus
           placeholder="이메일"
           error={login.errors.email}
           touched={login.touched.email}
           inputMode="email"
+          returnKeyType="next"
+          blurOnSubmit={false}
+          onSubmitEditing={() => passwordRef.current?.focus()}
           {...login.getTextInputProps('email')}
         />
         <InputField
+          ref={passwordRef}
           placeholder="비밀번호"
           error={login.errors.password}
           touched={login.touched.password}
           secureTextEntry
+          returnKeyType="join"
+          onSubmitEditing={handleSubmit}
           {...login.getTextInputProps('password')}
         />
       </View>
-      <CustomBotton
+      <CustomButton
         label="로그인"
         variant="filled"
         size="large"

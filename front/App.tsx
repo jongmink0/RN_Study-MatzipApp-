@@ -1,15 +1,16 @@
+import React from 'react';
+import {QueryClientProvider} from '@tanstack/react-query';
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
-import AuthHomeScreen from './src/screens/auth/AuthHomeScreen';
-import AuthStackNavigator from './src/navigations/stack/AuthStackNavigator';
 import Rootnavigator from './src/navigations/root/RootNavigator';
+import queryClient from './src/api/queryClient';
 
 function App() {
   return (
-    <NavigationContainer>
-      <Rootnavigator />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Rootnavigator />
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 

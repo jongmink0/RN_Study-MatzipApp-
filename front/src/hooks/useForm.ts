@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react';
 
-interface useFormProps<T> {
+interface UseFormProps<T> {
   initialValue: T;
   validate: (values: T) => Record<keyof T, string>;
 }
 
-function useForm<T>({initialValue, validate}: useFormProps<T>) {
+function useForm<T>({initialValue, validate}: UseFormProps<T>) {
   const [values, setValues] = useState(initialValue);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -24,13 +24,13 @@ function useForm<T>({initialValue, validate}: useFormProps<T>) {
     });
   };
 
-  function getTextInputProps(name: keyof T) {
+  const getTextInputProps = (name: keyof T) => {
     const value = values[name];
     const onChangeText = (text: string) => handleChangeText(name, text);
     const onBlur = () => handleBlur(name);
 
     return {value, onChangeText, onBlur};
-  }
+  };
 
   useEffect(() => {
     const newErrors = validate(values);
