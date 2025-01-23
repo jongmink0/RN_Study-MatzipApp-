@@ -6,8 +6,8 @@ import {
   TextInputProps,
   Text,
   Pressable,
+  TextInput
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
 import {colors} from '../constants';
 import {mergeRefs} from '../utils';
 
@@ -39,7 +39,7 @@ const inputField = forwardRef(
             touched && Boolean(error) && styles.inputError,
           ]}>
           <TextInput
-            ref={ref ? mergeRefs(innerRef, ref) : innerRef}
+            ref={ref? mergeRefs(innerRef, ref) : innerRef}
             editable={!disabled}
             placeholderTextColor={colors.GRAY_500}
             style={[styles.input, disabled && styles.disabled]}

@@ -1,25 +1,23 @@
 import React, {useRef} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
 import InputField from '@/components/inputField';
+import CustomButton from '@/components/CustomButton';
 import useForm from '@/hooks/useForm';
-import CustomBotton from '@/components/CustomButton';
-import {validateSignup} from '@/utils';
 import useAuth from '@/hooks/queries/useAuth';
+import {validateSignup} from '@/utils';
 
-function SignScreen() {
+function SignupScreen() {
   const passwordRef = useRef<TextInput | null>(null);
   const passwordConfirmRef = useRef<TextInput | null>(null);
-  const {signupMutation, loginMutation, isLogin, getProfileQuery} = useAuth();
-
   const signup = useForm({
-    initialValue: {
-      email: '',
-      password: '',
-      passwordConfirm: '',
-    },
+    initialValue: {email: '', password: '', passwordConfirm: ''},
     validate: validateSignup,
   });
+  
+
+  const {signupMutation, loginMutation, isLogin, getProfileQuery} = useAuth();
+
+
 
   const handleSubmit = () => {
     const {email, password} = signup.values;
@@ -35,6 +33,7 @@ function SignScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <InputField
+          autoFocus
           placeholder="이메일"
           error={signup.errors.email}
           touched={signup.touched.email}
@@ -47,6 +46,7 @@ function SignScreen() {
         <InputField
           ref={passwordRef}
           placeholder="비밀번호"
+          textContentType="oneTimeCode"
           error={signup.errors.password}
           touched={signup.touched.password}
           secureTextEntry
@@ -61,11 +61,12 @@ function SignScreen() {
           error={signup.errors.passwordConfirm}
           touched={signup.touched.passwordConfirm}
           secureTextEntry
+          returnKeyType="join"
           onSubmitEditing={handleSubmit}
           {...signup.getTextInputProps('passwordConfirm')}
         />
       </View>
-      <CustomBotton label="회원가입" onPress={handleSubmit} />
+      <CustomButton label="회원가입" onPress={handleSubmit} />
     </SafeAreaView>
   );
 }
@@ -81,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignScreen;
+export default SignupScreen;
